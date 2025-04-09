@@ -1,19 +1,21 @@
-import jwt from "jsonwebtoken"
+// middleware/auth.js
+import jwt from 'jsonwebtoken'; // ✅ ESM style
 
-const authMiddleware = async(req,res,next)=>{
-  const {token}=req.headers;
-  if(!token){
-    return res.json({success:false,message:"Not Authorized Login Again"})
+const verifyToken = (req, res, next) => {
+  const token = req.headers.token;
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: "Access denied. No token provided." });
   }
-  try{
-    const token_decode = jwt.verify(token,process.env.JWT_SECRET)
-    req.userId = token_decode.id;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.id;
     next();
+  } catch (err) {
+    return res.status(400).json({ success: false, message: "Invalid token." });
   }
-  catch(error){
-   console.log(error);
-   res.json({success:false,message:"Error"})
-  }
-}
+};
 
-export default authMiddleware;
+export default verifyToken; // ✅ ESM default export
+
