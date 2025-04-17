@@ -22,67 +22,40 @@ const PlaceOrder = () => {
 
   const navigate = useNavigate();
 
-  const validatePhone = (phone) => /^[0-9]{10}$/.test(phone); // Optional phone validation
-  const validateZipcode = (zipcode) => /^[0-9]{5}$/.test(zipcode); // Optional zipcode validation
-
   const placeOrder = async (event) => {
     event.preventDefault();
 
-    // Check if cart is empty
-    if (getTotalCartAmount() === 0) {
-      toast.error("Your cart is empty! Please add some items.");
-      return;
-    }
+    
+  if (getTotalCartAmount() === 0) {
+    toast.error("Your cart is empty!");
+    return;
+  }
 
-    // Validate phone number
-    if (!validatePhone(data.phone)) {
-      toast.error("Invalid phone number!");
-      return;
-    }
-
-    // Validate zipcode
-    if (!validateZipcode(data.zipcode)) {
-      toast.error("Invalid zipcode!");
-      return;
-    }
-
-    // Prepare order items data
     const orderItems = food_list
       .filter(item => cartItems[item._id] > 0)
       .map(item => ({ ...item, quantity: cartItems[item._id] }));
 
-    // Prepare the order data object
     const orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() + 2, // Adding delivery fee of 2
+      amount: getTotalCartAmount() + 2,
     };
 
     try {
-      // Call the backend API to place the order
-      const response = await axios.post(`${url}/api/order/place`, orderData, {
-        headers: { Authorization: `Bearer ${token}` }, // Send the JWT token in the Authorization header
+      const response = await axios.post(${url}/api/order/place, orderData, {
+        headers: { token }
       });
 
-      // Check if order placement is successful
       if (response.data.success) {
         toast.success("Order placed successfully!");
-
-        // Clear the cart in the frontend context
-        setCartItems({}); // Reset the cart in the context
-        localStorage.removeItem('cartData'); // Optionally clear cart data in localStorage (if used)
-
-        // Redirect after 1 second
-        setTimeout(() => navigate("/"), 1000);
+        setCartItems({}); // Clear cart in frontend context
+        setTimeout(() => navigate("/"), 1000); // Redirect after 2s
       } else {
         toast.error("Failed to place order");
       }
     } catch (error) {
       console.error("Order error:", error);
-
-      // Show the error message from the backend, if available
-      const errorMessage = error.response?.data?.message || "Something went wrong";
-      toast.error(errorMessage);
+      toast.error("Something went wrong");
     }
   };
 
@@ -131,7 +104,7 @@ const PlaceOrder = () => {
               <b>${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
             </div>
           </div>
-          <button type='submit'>{getTotalCartAmount() === 0 ? "Add Items" : "Proceed to Payment"}</button>
+          <button type='submit'>PROCEED TO Payment</button>
         </div>
       </div>
     </form>
