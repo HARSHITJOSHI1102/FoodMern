@@ -11,11 +11,7 @@ const app = express()
 const port = process.env.PORT ||  4000;
 
 app.use(express.json())
-app.use(cors({
-  origin: "https://foodmernfrontend.onrender.com", // <-- this needs to change
-  credentials: true,
-}));
-
+ap.use(cors());
 
 // db connect 
 connectDB();
