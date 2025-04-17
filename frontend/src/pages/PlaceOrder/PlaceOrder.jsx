@@ -7,7 +7,15 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems, url, setCartItems } = useContext(StoreContext);
+  const {
+    getTotalCartAmount,
+    token,
+    food_list,
+    cartItems,
+    url,
+    setCartItems
+  } = useContext(StoreContext);
+
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -25,31 +33,35 @@ const PlaceOrder = () => {
   const placeOrder = async (event) => {
     event.preventDefault();
 
-    
-  if (getTotalCartAmount() === 0) {
-    toast.error("Your cart is empty!");
-    return;
-  }
+    if (getTotalCartAmount() === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
 
     const orderItems = food_list
       .filter(item => cartItems[item._id] > 0)
-      .map(item => ({ ...item, quantity: cartItems[item._id] }));
+      .map(item => ({
+        ...item,
+        quantity: cartItems[item._id]
+      }));
 
     const orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() + 2,
+      amount: getTotalCartAmount() + 2, // Add delivery fee
     };
 
     try {
-      const response = await axios.post(${url}/api/order/place, orderData, {
-        headers: { token }
+      const response = await axios.post(`${url}/api/order/place`, orderData, {
+        headers: {
+          token: token // ✅ OR use Authorization: `Bearer ${token}` if needed
+        }
       });
 
       if (response.data.success) {
         toast.success("Order placed successfully!");
-        setCartItems({}); // Clear cart in frontend context
-        setTimeout(() => navigate("/"), 1000); // Redirect after 2s
+        setCartItems({});
+        setTimeout(() => navigate("/"), 1000);
       } else {
         toast.error("Failed to place order");
       }
