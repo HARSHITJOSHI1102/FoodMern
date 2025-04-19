@@ -1,7 +1,7 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 
-const frontend_url = "https://foodmern-wbct.onrender.com/";
+
 const placeOrder = async (req, res) => {
   try {
     const userId = req.userId; // This comes from verifyToken

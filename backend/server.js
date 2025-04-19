@@ -12,7 +12,7 @@ const port = process.env.PORT ||  4000;
 
 app.use(express.json())
 app.use(cors({
-  origin: "https://foodmernfrontend.onrender.com", // <-- this needs to change
+  origin: process.env.REACT_APP_BASE_URL, // <-- this needs to change
   credentials: true,
 }));
 
