@@ -7,8 +7,8 @@ const StoreContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
-  const url = process.env.REACT_APP_BASE_URL;
-  
+  const url = "https://foodbackend-pkhi.onrender.com";
+
   const addToCart = async (itemId) => {
     setCartItems((prev) => ({
       ...prev,
