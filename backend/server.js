@@ -8,11 +8,13 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 
 const app = express()
-const port = process.env.PORT ||  4000;
+const port = process.env.PORT || 4000;
+
+const frontendurl = "https://foodmernfrontend.onrender.com"
 
 app.use(express.json())
 app.use(cors({
-  origin: process.env.REACT_APP_BASE_URL, // <-- this needs to change
+  origin: frontendurl, // <-- this needs to change
   credentials: true,
 }));
 
@@ -27,11 +29,11 @@ app.use("/api/user", userRouter)
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.get("/", (req, res) => {
-    res.send("Api Working")
+  res.send("Api Working")
 })
 
 app.listen(port, () => {
-    console.log(`Server Started On http://localhost:${port}`)
+  console.log(`Server Started On http://localhost:${port}`)
 })
 
 // ?retryWrites=true&w=majority&appName=Cluster0
